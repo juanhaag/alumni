@@ -1,0 +1,25 @@
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+
+const <%= resource %> = sequelize.define(
+  "<%= resource %>",
+  {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = <%= resource %>;

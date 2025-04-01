@@ -1,0 +1,34 @@
+version: "3.1"
+
+services:
+    mariadb:
+        image: "mariadb:10.5"
+        restart: 'always'
+        ports: 
+            - "3306:3306"
+        environment: 
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: seminario
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            - app-network
+
+    adminer:
+        image: adminer
+        links:
+            - mariadb:test
+        restart: always
+        ports:
+            - '8080:8080'
+        environment:
+            MYSQL_ROOT_PASSWORD: test
+            MYSQL_DATABASE: test
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge

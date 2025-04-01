@@ -1,0 +1,56 @@
+const  <%= resource %>  = require("../models/<%= resource %>");
+
+exports.getAll<%= resource %>s = async (req, res) => {
+  try {
+    const items = await <%= resource %>.findAll();
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.create<%= resource %> = async (req, res) => {
+  try {
+    const newItem = await <%= resource %>.create(req.body);
+    res.status(201).json(newItem);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.get<%= resource %>ById = async (req, res) => {
+  try {
+    const item = await <%= resource %>.findByPk(req.params.id);
+    if (!item) return res.status(404).json({ error: "Not found" });
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.update<%= resource %> = async (req, res) => {
+  try {
+    const [updated] = await <%= resource %>.update(req.body, {
+      where: { id: req.params.id },
+    });
+    if (updated) {
+      const updatedItem = await <%= resource %>.findByPk(req.params.id);
+      return res.json(updatedItem);
+    }
+    res.status(404).json({ error: "Not found" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.delete<%= resource %> = async (req, res) => {
+  try {
+    const deleted = await <%= resource %>.destroy({
+      where: { id: req.params.id },
+    });
+    if (deleted) return res.json({ message: "Deleted successfully" });
+    res.status(404).json({ error: "Not found" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

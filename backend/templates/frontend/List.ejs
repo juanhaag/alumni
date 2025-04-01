@@ -1,0 +1,56 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import api from "../../services/api"; // Usa el servicio API
+import { Button, Table } from "@mui/material";
+
+const <%= resource %>List = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/<%= resource.toLowerCase() %>s");
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      <Button variant="contained" component={Link} to="/<%= resource.toLowerCase() %>s/create">
+        Crear <%= resource %>
+      </Button>
+      <Table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.id}>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.category}</td>
+              <td>{item.isActive ? "Activo" : "Inactivo"}</td>
+              <td>
+                <Button component={Link} to={`/<%= resource.toLowerCase() %>s/${item.id}/edit`}>
+                  Editar
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </>
+  );
+};
+
+export default <%= resource %>List;

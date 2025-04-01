@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const <%= resource %>Controller = require("../controllers/<%= resource %>Controller");
+
+router.get("/", <%= resource %>Controller.getAll<%= resource %>s);
+router.post("/", <%= resource %>Controller.create<%= resource %>);
+router.get("/:id", <%= resource %>Controller.get<%= resource %>ById);
+router.put("/:id", <%= resource %>Controller.update<%= resource %>);
+router.delete("/:id", <%= resource %>Controller.delete<%= resource %>);
+
+module.exports = router;

@@ -1,0 +1,71 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../services/api"; // Usa el servicio API
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Switch } from "@mui/material";
+
+const <%= resource %>Create = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    isActive: false,
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post("/<%= resource.toLowerCase() %>s", formData); // Usa el servicio API
+      navigate("/<%= resource.toLowerCase() %>s");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <TextField
+        label="Nombre"
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        fullWidth
+        margin="normal"
+        required
+      />
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Categoría</InputLabel>
+        <Select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          label="Categoría"
+        >
+          <MenuItem value="option1">Opción 1</MenuItem>
+          <MenuItem value="option2">Opción 2</MenuItem>
+          <MenuItem value="option3">Opción 3</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth margin="normal">
+        <Switch
+          name="isActive"
+          checked={formData.isActive}
+          onChange={handleChange}
+        />
+        <span>{formData.isActive ? "Activo" : "Inactivo"}</span>
+      </FormControl>
+      <Button type="submit" variant="contained" fullWidth>
+        Guardar
+      </Button>
+    </form>
+  );
+};
+
+export default <%= resource %>Create;
